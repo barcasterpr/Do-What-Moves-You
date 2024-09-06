@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Capture and Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #video, #canvas {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+        #errorLog {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Capture and Upload</h1>
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <div>
+            <button id="captureButton">Capture Image</button>
+            <button id="uploadButton" style="display:none;">Upload Image</button>
+            <button id="retakeButton" style="display:none;">Retake</button>
+        </div>
+        <div id="errorLog"></div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('captureButton');
+        const uploadButton = document.getElementById('uploadButton');
+        const retakeButton = document.getElementById('retakeButton');
+        const errorLog = document.getElementById('errorLog');
+
+        // Replace with your Vercel deployment URL
+        const BACKEND_URL = 'https://upload-to-drive-orpin.vercel.app';
+
+        async function setupCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                video.srcObject = stream;
+                await video.play();
+            } catch (error) {
+                errorLog.textContent = `Camera error: ${error.message}`;
+            }
+        }
+
+        captureButton.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            video.style.display = 'none';
+            canvas.style.display = 'block';
+            captureButton.style.display = 'none';
+            uploadButton.style.display = 'inline-block';
+            retakeButton.style.display = 'inline-block';
+        });
+
+        retakeButton.addEventListener('click', () => {
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+            captureButton.style.display = 'inline-block';
+            uploadButton.style.display = 'none';
+            retakeButton.style.display = 'none';
+        });
+
+        uploadButton.addEventListener('click', async () => {
+    canvas.toBlob(async (blob) => {
+        try {
+            const response = await fetch(`${BACKEND_URL}/upload`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': blob.type,
+                    'X-File-Name': 'captured_image.jpg'
+                },
+                body: blob
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Upload successful:', result);
+            alert(result.message);
+        } catch (error) {
+            console.error('Upload error:', error);
+            errorLog.textContent = `Upload error: ${error.message}`;
+        }
+    }, 'image/jpeg');
+});
+
+       
+
+        window.addEventListener('load', setupCamera);
+    </script>
+</body>
+</html>
