@@ -30,7 +30,7 @@ async function uploadFile(fileBuffer, originalname, mimetype) {
     requestBody: {
       name: originalname,
       mimeType: mimetype,
-      parents: ["1MNDyo93mCGuUW-mFAmfvnjTok_6cEq76"] // Your folder ID
+      parents: ["1iggYuOCX_92JWfIqxS8D7o49JU_r5jJy"] // Your folder ID
     },
     media: {
       mimeType: mimetype,
