@@ -15,54 +15,46 @@
 
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #3ca360; /* Green background color */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0; /* Removed background image */
         }
 
         .container {
-            text-align: center;
-            background-color: #3ca360; /* Changed to green */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffffff; /* White background for the content */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: relative; /* Ensure positioning for child elements */
-            max-height: 90vh; /* Ensure container does not grow too large */
-            overflow-y: auto; /* Allow scrolling if content exceeds max-height */
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            width: 90%; /* Max width for responsiveness */
+            max-width: 500px; /* Max width for larger screens */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background-color: #ffffff; /* White background for header */
+            padding: 20px 0;
+            box-sizing: border-box;
+            margin-bottom: 20px; /* Space between header and camera */
         }
 
         .logo {
-            width: 250px; /* Adjust size as needed */
-            display: block;
-            margin: 0 auto; /* Center the logo */
-            margin-bottom: 10px; /* Space between logo and text */
+            width: 200px; /* Adjust size as needed */
         }
 
-        @media (max-width: 600px) {
-            .logo {
-                width: 150px; /* Make the logo smaller on smaller screens */
-                margin-top: 30px;
-                margin-bottom: 5px; /* Adjust space for smaller screens */
-            }
-
-            .container {
-                padding: 10px; /* Reduce padding on smaller screens */
-            }
-
-            button {
-                font-size: 14px; /* Make buttons slightly smaller */
-                padding: 8px 16px;
-            }
-        }
-
-        /* Existing styles */
         #video, #canvas {
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
             margin-bottom: 20px;
         }
 
@@ -71,8 +63,6 @@
             margin: 5px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
             border: 2px solid white; /* Added thin white outline */
             border-radius: 4px;
         }
@@ -90,13 +80,6 @@
             font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
         }
 
-        h1 {
-            font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
-            color: white; /* Changed text color to white */
-            margin: 0; /* Remove default margin */
-            margin-bottom: 15px; /* Adjusted margin to reduce the gap */
-        }
-
         button:disabled {
             background-color: #cccccc;
         }
@@ -105,14 +88,26 @@
             color: red;
             margin-top: 10px;
         }
+
+        @media (max-width: 600px) {
+            .logo {
+                width: 150px; /* Make the logo smaller on smaller screens */
+            }
+
+            button {
+                font-size: 14px; /* Make buttons slightly smaller */
+                padding: 8px 16px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logo without the white background -->
-        <img src="https://raw.githubusercontent.com/barcasterpr/do-what-moves-you/main/FY20_Bacardi_AMEA_Logos_Primary_No_Background_Full_Colour_PMS-4.png" alt="Logo" class="logo">
+        <!-- Header with logo -->
+        <div class="header">
+            <img src="https://raw.githubusercontent.com/barcasterpr/do-what-moves-you/main/FY20_Bacardi_AMEA_Logos_Primary_No_Background_Full_Colour_PMS-4.png" alt="Logo" class="logo">
+        </div>
         
-        <h1>DO WHAT MOVES YOU</h1>
         <video id="video" autoplay playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
         <div>
