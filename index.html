@@ -45,7 +45,7 @@
             background-color: #ffffff; /* White background for header */
             padding: 20px 0;
             box-sizing: border-box;
-            margin-bottom: 10px; /* Reduced space between header and camera */
+            margin-bottom: 20px; /* Space between header and camera */
         }
 
         .logo {
@@ -55,13 +55,7 @@
         #video, #canvas {
             width: 100%;
             max-width: 400px;
-            margin-bottom: 10px; /* Reduced space between camera and buttons */
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px; /* Space between buttons */
-            margin-top: 10px; /* Space above button group */
+            margin-bottom: 20px;
         }
 
         button {
@@ -77,6 +71,7 @@
             background-color: #292725; /* Button color */
             color: white; /* Text color */
             font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
+            margin-bottom: 15px; /* Space between this button and others */
         }
 
         #captureButton {
@@ -115,12 +110,12 @@
         
         <video id="video" autoplay playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
-        <div class="button-group">
+        <div>
             <button id="switchCameraButton">SWITCH CAMERA</button> <!-- Updated button text and styles -->
             <button id="captureButton">¡TOMA UN SELFIE!</button>
+            <button id="uploadButton" style="display:none;">Upload Image</button>
+            <button id="retakeButton" style="display:none;">Retake</button>
         </div>
-        <button id="uploadButton" style="display:none;">Upload Image</button>
-        <button id="retakeButton" style="display:none;">Retake</button>
         <div id="errorLog"></div>
     </div>
 
