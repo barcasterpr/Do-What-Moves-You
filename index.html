@@ -28,20 +28,11 @@
 
         .container {
             text-align: center;
-            background-color: white; /* White background for the container */
+            background-color: #3ca360; /* Changed to green */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: relative; /* Ensure positioning for child elements */
-        }
-
-        /* New styling for logo background */
-        .logo-container {
-            background-color: white; /* White background behind the logo */
-            padding: 10px; /* Space around the logo */
-            display: inline-block; /* Adjust width to content */
-            border-radius: 8px; /* Optional: rounded corners */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: shadow for depth */
         }
 
         .logo {
@@ -79,7 +70,7 @@
             cursor: pointer;
             background-color: #4CAF50;
             color: white;
-            border: none;
+            border: 2px solid white; /* Added thin white outline */
             border-radius: 4px;
         }
 
@@ -91,7 +82,7 @@
 
         h1 {
             font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
-            color: #292725; /* You can change the color if needed */
+            color: white; /* Changed text color to white */
             margin-bottom: 30px;
         }
 
@@ -107,10 +98,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- Logo container with white background -->
-        <div class="logo-container">
-            <img src="https://raw.githubusercontent.com/barcasterpr/do-what-moves-you/main/FY20_Bacardi_AMEA_Logos_Primary_No_Background_Full_Colour_PMS-4.png" alt="Logo" class="logo">
-        </div>
+        <!-- Logo without the white background -->
+        <img src="https://raw.githubusercontent.com/barcasterpr/do-what-moves-you/main/FY20_Bacardi_AMEA_Logos_Primary_No_Background_Full_Colour_PMS-4.png" alt="Logo" class="logo">
         
         <h1>DO WHAT MOVES YOU</h1>
         <video id="video" autoplay playsinline></video>
