@@ -25,25 +25,35 @@
             height: 100vh;
         }
 
-        .container {
-            position: center;
+          .container {
+            position: relative; /* Changed from 'center' to 'relative' */
             background-image: url('Assets/Container BG Reduced.png'); /* Container background */
-            background-size: cover;
+            background-size: contain; /* Ensures the whole image is displayed */
             background-repeat: no-repeat;
-            width: 85%; /* Width adjustment */
-            max-width: 400px; /* Maximum width */
-            height: 600px; /* Height adjustment */
+            width: 85vw; /* Width adjusts based on viewport width for better responsiveness */
+            max-width: 390px; /* Maximum width for larger screens */
+            height: auto; /* Let height scale with the width to maintain aspect ratio */
+            aspect-ratio: 3 / 4.5; /* Aspect ratio based on your image's 750x1125 size */
             box-sizing: border-box;
             padding: 20px 10px; /* Adjusted padding */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-        }
+}
+
+/* Media query for very small screens (like older iPhones or smaller Androids) */
+@media (max-width: 375px) {
+    .container {
+        width: 90vw; /* Slightly wider for very small screens */
+        max-width: none; /* Removes the max-width constraint on small devices */
+        padding: 15px 8px; /* Adjust padding for smaller devices */
+    }
+}
 
         #video, #canvas {
             width: 100%;
-            max-width: 320px; /* Video and canvas size */
+            max-width: 300px; /* Video and canvas size */
             margin-bottom: 15px; /* Spacing between elements */
         }
 
