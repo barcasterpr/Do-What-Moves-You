@@ -17,7 +17,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #3ca360; /* Green background color */
+            background-image: url('Assets/FY23_Bacardi_BG.png'); /* New background image */
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,31 +26,18 @@
         }
 
         .container {
+            position: relative;
+            background-image: url('Assets/Container BG.png'); /* New tan "Frame" container */
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 90%; /* Max width for responsiveness */
+            max-width: 500px;
+            height: 700px; /* Set a specific height to fit the container */
+            box-sizing: border-box;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #ffffff; /* White background for the content */
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 90%; /* Max width for responsiveness */
-            max-width: 500px; /* Max width for larger screens */
-            box-sizing: border-box; /* Include padding in width calculation */
-        }
-
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            background-color: #ffffff; /* White background for header */
-            padding: 20px 0;
-            box-sizing: border-box;
-            margin-bottom: 10px; /* Reduced space between header and camera */
-        }
-
-        .logo {
-            width: 200px; /* Adjust size as needed */
         }
 
         #video, #canvas {
@@ -63,28 +51,38 @@
             margin: 5px;
             font-size: 16px;
             cursor: pointer;
-            border: 2px solid white; /* Added thin white outline */
+            border: 2px solid white;
             border-radius: 4px;
-            font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
+            font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif;
         }
 
-        #switchCameraButton, #captureButton {
-            background-color: #292725; /* Button color for Switch Camera */
-            color: white; /* Text color */
+        #switchCameraButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #292725;
+            color: white;
+            width: 100px; /* Set specific width for alignment */
+        }
+
+        #switchCameraButton img {
+            width: 20px; /* Camera switch icon size */
+            margin-right: 10px; /* Space between icon and text */
         }
 
         #captureButton {
-            background-color: #3ca360; /* Button color for Capture */
+            background-color: #3ca360; /* Green background */
+            color: white;
         }
 
         #uploadButton {
-            background-color: #3ca360; /* Button color for Upload Image */
-            color: white; /* Text color */
+            background-color: #3ca360;
+            color: white;
         }
 
         #retakeButton {
-            background-color: #e74c3c; /* Button color for Retake */
-            color: white; /* Text color */
+            background-color: #e74c3c;
+            color: white;
         }
 
         button:disabled {
@@ -96,36 +94,59 @@
             margin-top: 10px;
         }
 
+        /* New section for footer text */
+        .footer-text {
+            font-size: 12px;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Disclaimer section */
+        .disclaimer {
+            font-size: 10px;
+            color: white;
+            text-align: center;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
         @media (max-width: 600px) {
-            .logo {
-                width: 150px; /* Make the logo smaller on smaller screens */
+            button {
+                font-size: 14px;
+                padding: 8px 16px;
             }
 
-            button {
-                font-size: 14px; /* Make buttons slightly smaller */
-                padding: 8px 16px;
+            #switchCameraButton img {
+                width: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header with logo -->
-        <div class="header">
-            <img src="https://raw.githubusercontent.com/barcasterpr/do-what-moves-you/main/FY20_Bacardi_AMEA_Logos_Primary_No_Background_Full_Colour_PMS-4.png" alt="Logo" class="logo">
-        </div>
-        
         <video id="video" autoplay playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
         <div>
-            <button id="switchCameraButton">SWITCH CAMERA</button>
-            <button id="captureButton">¡TOMA UN SELFIE!</button>
+            <button id="switchCameraButton">
+                <img src="Assets/Camera Switch Icon.png" alt="Switch Icon">SWITCH
+            </button>
+            <button id="captureButton">TAKE SELFIE!</button> <!-- Changed text to "TAKE SELFIE!" -->
         </div>
         <div id="additionalButtons" style="display:none; text-align:center;">
             <button id="uploadButton">Upload Image</button>
             <button id="retakeButton">Retake</button>
         </div>
         <div id="errorLog"></div>
+
+        <!-- Footer text -->
+        <div class="footer-text">LIVE PASSIONATELY. DRINK RESPONSIBLY.</div> <!-- New text below buttons -->
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">Disclaimer text goes here. Please drink responsibly.</div> <!-- New disclaimer section -->
     </div>
 
     <script>
@@ -162,17 +183,29 @@
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
+
+            // Add watermark logo
+            const img = new Image();
+            img.src = 'Assets/Bacardi Logo White.png'; // Watermark logo
+            img.onload = () => {
+                const ctx = canvas.getContext('2d');
+                const logoWidth = 150; // Adjust logo width
+                const logoHeight = (logoWidth / img.width) * img.height; // Maintain aspect ratio
+                const margin = 20; // Margin from top
+                ctx.drawImage(img, (canvas.width - logoWidth) / 2, margin, logoWidth, logoHeight); // Centered watermark
+            };
+
             video.style.display = 'none';
             canvas.style.display = 'block';
             captureButton.style.display = 'none';
-            additionalButtons.style.display = 'block'; // Show additional buttons
+            additionalButtons.style.display = 'block';
         });
 
         retakeButton.addEventListener('click', () => {
             video.style.display = 'block';
             canvas.style.display = 'none';
             captureButton.style.display = 'inline-block';
-            additionalButtons.style.display = 'none'; // Hide additional buttons
+            additionalButtons.style.display = 'none';
         });
 
         uploadButton.addEventListener('click', async () => {
