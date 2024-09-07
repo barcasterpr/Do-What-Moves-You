@@ -103,6 +103,7 @@
         <video id="video" autoplay playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
         <div>
+            <button id="switchCameraButton">Switch Camera</button>
             <button id="captureButton">¡TOMA UN SELFIE!</button>
             <button id="uploadButton" style="display:none;">Upload Image</button>
             <button id="retakeButton" style="display:none;">Retake</button>
@@ -116,19 +117,27 @@
         const captureButton = document.getElementById('captureButton');
         const uploadButton = document.getElementById('uploadButton');
         const retakeButton = document.getElementById('retakeButton');
+        const switchCameraButton = document.getElementById('switchCameraButton');
         const errorLog = document.getElementById('errorLog');
+
+        let currentFacingMode = 'user'; // Start with front camera
 
         // Replace with your Vercel deployment URL
         const BACKEND_URL = 'https://do-what-moves-you.vercel.app';
 
-        async function setupCamera() {
+        async function setupCamera(facingMode = 'user') {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
                 video.srcObject = stream;
                 await video.play();
             } catch (error) {
                 errorLog.textContent = `Camera error: ${error.message}`;
             }
+        }
+
+        function switchCamera() {
+            currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+            setupCamera(currentFacingMode);
         }
 
         captureButton.addEventListener('click', () => {
@@ -176,7 +185,9 @@
             }, 'image/jpeg');
         });
 
-        window.addEventListener('load', setupCamera);
+        switchCameraButton.addEventListener('click', switchCamera);
+
+        window.addEventListener('load', () => setupCamera(currentFacingMode));
     </script>
 </body>
 </html>
