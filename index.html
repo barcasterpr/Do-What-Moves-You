@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Capture and Upload</title>
     <style>
-        /* Blue: Custom font-face */
+        /* Custom font-face */
         @font-face {
             font-family: 'HelveticaNowTextExtraBold';
             src: url('Assets/HelveticaNowText-ExtraBold.ttf.woff') format('woff');
@@ -17,7 +17,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('Assets/FY23_Bacardi_BG.png'); /* New background image */
+            background-image: url('Assets/FY23_Bacardi_BG.png'); /* Background image */
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -27,24 +27,24 @@
 
         .container {
             position: relative;
-            background-image: url('Assets/Container BG Reduced.png'); /* New tan "Frame" container */
+            background-image: url('Assets/Container BG Reduced.png'); /* Container background */
             background-size: cover;
             background-repeat: no-repeat;
-            width: 85%; /* Adjusted width for smaller container */
-            max-width: 400px; /* Reduced maximum width */
-            height: 600px; /* Reduced height */
+            width: 85%; /* Width adjustment */
+            max-width: 400px; /* Maximum width */
+            height: 600px; /* Height adjustment */
             box-sizing: border-box;
-            padding: 20px 10px; /* Smaller padding for a tighter layout */
+            padding: 20px 10px; /* Adjusted padding */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* Ensure even distribution */
+            justify-content: space-between;
         }
 
         #video, #canvas {
             width: 100%;
-            max-width: 320px; /* Reduced video/canvas size */
-            margin-bottom: 15px; /* Adjusted space between elements */
+            max-width: 320px; /* Video and canvas size */
+            margin-bottom: 15px; /* Spacing between elements */
         }
 
         button {
@@ -55,7 +55,7 @@
             border: 2px solid white;
             border-radius: 4px;
             font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif;
-            text-transform: uppercase; /* Ensures all buttons have uppercase text */
+            text-transform: uppercase;
         }
 
         #switchCameraButton {
@@ -64,7 +64,7 @@
             justify-content: center;
             background-color: #292725;
             color: white;
-            width: 150px; /* Adjusted width for consistency */
+            width: 150px;
         }
 
         #switchCameraButton img {
@@ -72,13 +72,7 @@
             margin-right: 10px;
         }
 
-        #captureButton {
-            background-color: #3ca360; /* Green background */
-            color: white;
-            width: 150px; /* Adjusted width for consistency */
-        }
-
-        #uploadButton {
+        #captureButton, #uploadButton, #retakeButton {
             background-color: #3ca360;
             color: white;
             width: 150px;
@@ -86,8 +80,6 @@
 
         #retakeButton {
             background-color: #e74c3c;
-            color: white;
-            width: 150px;
         }
 
         button:disabled {
@@ -99,7 +91,7 @@
             margin-top: 10px;
         }
 
-        /* New section for footer text */
+        /* Footer text */
         .footer-text {
             font-size: 12px;
             color: white;
@@ -107,27 +99,28 @@
             margin-top: 20px;
         }
 
-        /* Disclaimer section */
+        /* Disclaimer */
         .disclaimer {
             font-size: 10px;
             color: white;
             text-align: center;
-            margin-top: 10px; /* Spacing from the container */
+            margin-top: 10px;
             line-height: 1.4;
             width: 100%;
         }
 
         .disclaimer strong {
-            text-decoration: underline; /* Outline the important text */
+            text-decoration: underline;
         }
 
-        /* Button alignment section */
+        /* Button group layout */
         .button-group {
             display: flex;
             justify-content: space-between;
-            width: 100%; /* Full width to align buttons properly */
+            width: 100%;
         }
 
+        /* Responsive design */
         @media (max-width: 600px) {
             button {
                 font-size: 12px;
@@ -151,20 +144,20 @@
             <button id="captureButton">TAKE SELFIE!</button>
         </div>
         <div id="additionalButtons" style="display:none; text-align:center;">
-            <button id="retakeButton">RETAKE</button> <!-- Retake button is now on the left -->
-            <button id="uploadButton">UPLOAD IMAGE</button> <!-- Upload button is now on the right -->
+            <button id="retakeButton">RETAKE</button>
+            <button id="uploadButton">UPLOAD IMAGE</button>
         </div>
         <div id="errorLog"></div>
 
         <!-- Footer text -->
-        <div class="footer-text">LIVE PASSIONATELY. DRINK RESPONSIBLY.</div> <!-- New text below buttons -->
+        <div class="footer-text">LIVE PASSIONATELY. DRINK RESPONSIBLY.</div>
 
-        <!-- Disclaimer outside the container -->
+        <!-- Disclaimer -->
         <div class="disclaimer">
             By taking a photo, you agree that it may be used for marketing purposes.
             <strong>We do not store your data or share it with third parties.</strong>
             Your privacy is important to us, and we handle all information with care.
-        </div> <!-- Updated disclaimer section -->
+        </div>
     </div>
 
     <script>
@@ -206,8 +199,8 @@
             img.onload = () => {
                 const ctx = canvas.getContext('2d');
                 const logoWidth = 150;
-                const logoHeight = (logoWidth / img.width) * img.height; 
-                const margin = 20; 
+                const logoHeight = (logoWidth / img.width) * img.height;
+                const margin = 20;
                 ctx.drawImage(img, (canvas.width - logoWidth) / 2, margin, logoWidth, logoHeight);
             };
 
