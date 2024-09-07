@@ -45,7 +45,7 @@
             background-color: #ffffff; /* White background for header */
             padding: 20px 0;
             box-sizing: border-box;
-            margin-bottom: 20px; /* Space between header and camera */
+            margin-bottom: 10px; /* Reduced space between header and camera */
         }
 
         .logo {
@@ -55,7 +55,7 @@
         #video, #canvas {
             width: 100%;
             max-width: 400px;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Reduced space between camera window and buttons */
         }
 
         button {
@@ -65,19 +65,26 @@
             cursor: pointer;
             border: 2px solid white; /* Added thin white outline */
             border-radius: 4px;
+            font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
         }
 
-        #switchCameraButton {
-            background-color: #292725; /* Button color */
+        #switchCameraButton, #captureButton {
+            background-color: #292725; /* Button color for Switch Camera */
             color: white; /* Text color */
-            font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
-            margin-bottom: 15px; /* Space between this button and others */
         }
 
         #captureButton {
-            background-color: #3ca360; /* Button color */
+            background-color: #3ca360; /* Button color for Capture */
+        }
+
+        #uploadButton {
+            background-color: #3ca360; /* Button color for Upload Image */
             color: white; /* Text color */
-            font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
+        }
+
+        #retakeButton {
+            background-color: #e74c3c; /* Button color for Retake */
+            color: white; /* Text color */
         }
 
         button:disabled {
@@ -111,10 +118,12 @@
         <video id="video" autoplay playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
         <div>
-            <button id="switchCameraButton">SWITCH CAMERA</button> <!-- Updated button text and styles -->
+            <button id="switchCameraButton">SWITCH CAMERA</button>
             <button id="captureButton">¡TOMA UN SELFIE!</button>
-            <button id="uploadButton" style="display:none;">Upload Image</button>
-            <button id="retakeButton" style="display:none;">Retake</button>
+        </div>
+        <div id="additionalButtons" style="display:none; text-align:center;">
+            <button id="uploadButton">Upload Image</button>
+            <button id="retakeButton">Retake</button>
         </div>
         <div id="errorLog"></div>
     </div>
@@ -127,6 +136,7 @@
         const retakeButton = document.getElementById('retakeButton');
         const switchCameraButton = document.getElementById('switchCameraButton');
         const errorLog = document.getElementById('errorLog');
+        const additionalButtons = document.getElementById('additionalButtons');
 
         let currentFacingMode = 'user'; // Start with front camera
 
@@ -155,16 +165,14 @@
             video.style.display = 'none';
             canvas.style.display = 'block';
             captureButton.style.display = 'none';
-            uploadButton.style.display = 'inline-block';
-            retakeButton.style.display = 'inline-block';
+            additionalButtons.style.display = 'block'; // Show additional buttons
         });
 
         retakeButton.addEventListener('click', () => {
             video.style.display = 'block';
             canvas.style.display = 'none';
             captureButton.style.display = 'inline-block';
-            uploadButton.style.display = 'none';
-            retakeButton.style.display = 'none';
+            additionalButtons.style.display = 'none'; // Hide additional buttons
         });
 
         uploadButton.addEventListener('click', async () => {
