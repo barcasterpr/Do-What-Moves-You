@@ -30,11 +30,11 @@
             background-image: url('Assets/Container BG.png'); /* New tan "Frame" container */
             background-size: cover;
             background-repeat: no-repeat;
-            width: 90%; /* Max width for responsiveness */
-            max-width: 500px;
-            height: 700px; /* Set a specific height to fit the container */
+            width: 85%; /* Adjusted width for smaller container */
+            max-width: 400px; /* Reduced maximum width */
+            height: 600px; /* Reduced height */
             box-sizing: border-box;
-            padding: 40px 20px;
+            padding: 20px 10px; /* Smaller padding for a tighter layout */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -42,14 +42,14 @@
 
         #video, #canvas {
             width: 100%;
-            max-width: 400px;
-            margin-bottom: 10px; /* Reduced space between camera window and buttons */
+            max-width: 320px; /* Reduced video/canvas size */
+            margin-bottom: 15px; /* Adjusted space between elements */
         }
 
         button {
             padding: 10px 20px;
             margin: 5px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             border: 2px solid white;
             border-radius: 4px;
@@ -62,17 +62,24 @@
             justify-content: center;
             background-color: #292725;
             color: white;
-            width: 100px; /* Set specific width for alignment */
+            width: 120px; /* Adjusted width */
+            margin-bottom: 10px; /* Added margin for better spacing */
         }
 
         #switchCameraButton img {
-            width: 20px; /* Camera switch icon size */
-            margin-right: 10px; /* Space between icon and text */
+            width: 20px;
+            margin-right: 10px;
         }
 
         #captureButton {
             background-color: #3ca360; /* Green background */
             color: white;
+            width: 150px; /* Adjusted width for consistency */
+        }
+
+        #uploadButton, #retakeButton {
+            width: 150px; /* Adjusted width */
+            margin: 5px auto; /* Centered buttons */
         }
 
         #uploadButton {
@@ -112,11 +119,16 @@
             width: 100%;
             padding: 0 10px;
             box-sizing: border-box;
+            line-height: 1.4;
+        }
+
+        .disclaimer strong {
+            text-decoration: underline; /* Outline the important text */
         }
 
         @media (max-width: 600px) {
             button {
-                font-size: 14px;
+                font-size: 12px;
                 padding: 8px 16px;
             }
 
@@ -130,11 +142,11 @@
     <div class="container">
         <video id="video" autoplay playsinline></video>
         <canvas id="canvas" style="display:none;"></canvas>
-        <div>
+        <div style="text-align: center;">
             <button id="switchCameraButton">
                 <img src="Assets/Camera Switch Icon.png" alt="Switch Icon">SWITCH
             </button>
-            <button id="captureButton">TAKE SELFIE!</button> <!-- Changed text to "TAKE SELFIE!" -->
+            <button id="captureButton">TAKE SELFIE!</button>
         </div>
         <div id="additionalButtons" style="display:none; text-align:center;">
             <button id="uploadButton">Upload Image</button>
@@ -146,7 +158,11 @@
         <div class="footer-text">LIVE PASSIONATELY. DRINK RESPONSIBLY.</div> <!-- New text below buttons -->
 
         <!-- Disclaimer -->
-        <div class="disclaimer">Disclaimer text goes here. Please drink responsibly.</div> <!-- New disclaimer section -->
+        <div class="disclaimer">
+            By taking a photo, you agree that it may be used for marketing purposes.
+            <strong>We do not store your data or share it with third parties.</strong>
+            Your privacy is important to us, and we handle all information with care.
+        </div> <!-- Updated disclaimer section -->
     </div>
 
     <script>
