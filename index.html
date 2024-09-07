@@ -30,18 +30,23 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: relative; /* Ensure positioning for child elements */
+            max-height: 90vh; /* Ensure container does not grow too large */
+            overflow-y: auto; /* Allow scrolling if content exceeds max-height */
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
         }
 
         .logo {
             width: 250px; /* Adjust size as needed */
             display: block;
             margin: 0 auto; /* Center the logo */
+            margin-bottom: 10px; /* Space between logo and text */
         }
 
         @media (max-width: 600px) {
             .logo {
                 width: 150px; /* Make the logo smaller on smaller screens */
                 margin-top: 30px;
+                margin-bottom: 5px; /* Adjust space for smaller screens */
             }
 
             .container {
@@ -88,7 +93,8 @@
         h1 {
             font-family: 'HelveticaNowTextExtraBold', Arial, sans-serif; /* Custom font */
             color: white; /* Changed text color to white */
-            margin-bottom: 15px; /* Adjusted margin to move text up */
+            margin: 0; /* Remove default margin */
+            margin-bottom: 15px; /* Adjusted margin to reduce the gap */
         }
 
         button:disabled {
