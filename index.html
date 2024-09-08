@@ -174,108 +174,92 @@
         </div>
     </div>
 
-<script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const captureButton = document.getElementById('captureButton');
-    const uploadButton = document.getElementById('uploadButton');
-    const retakeButton = document.getElementById('retakeButton');
-    const switchCameraButton = document.getElementById('switchCameraButton');
-    const errorLog = document.getElementById('errorLog');
-    const additionalButtons = document.getElementById('additionalButtons');
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('captureButton');
+        const uploadButton = document.getElementById('uploadButton');
+        const retakeButton = document.getElementById('retakeButton');
+        const switchCameraButton = document.getElementById('switchCameraButton');
+        const errorLog = document.getElementById('errorLog');
+        const additionalButtons = document.getElementById('additionalButtons');
 
-    let currentFacingMode = 'user'; // Start with front camera
+        let currentFacingMode = 'user'; // Start with front camera
 
-    const BACKEND_URL = 'https://do-what-moves-you.vercel.app';
+        const BACKEND_URL = 'https://do-what-moves-you.vercel.app';
 
-    async function setupCamera(facingMode = 'user') {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: facingMode,
-                    width: { ideal: 1080 }, // Set ideal width to 1080px
-                    height: { ideal: 1920 }, // Set ideal height to 1920px
-                    // Orientation adjustment
-                    transform: 'rotate(90deg)'
-                }
-            });
-            video.srcObject = stream;
-            await video.play();
-            // Rotate the video to match the vertical orientation
-            video.style.transform = 'rotate(90deg)';
-            video.style.width = '100vh'; // Make video element fit the vertical screen height
-            video.style.height = 'auto'; // Maintain aspect ratio
-        } catch (error) {
-            errorLog.textContent = `Camera error: ${error.message}`;
-        }
-    }
-
-    function switchCamera() {
-        currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
-        setupCamera(currentFacingMode);
-    }
-
-    captureButton.addEventListener('click', () => {
-        // Capture the exact resolution from the video element
-        canvas.width = video.videoHeight; // Reverse width and height
-        canvas.height = video.videoWidth; // Reverse width and height
-
-        // Draw the video frame on the canvas at the current resolution
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Adding the watermark
-        const img = new Image();
-        img.src = 'Assets/Bacardi Logo White.png'; // Watermark logo
-        img.onload = () => {
-            const logoWidth = 250; // Increased logo width
-            const logoHeight = (logoWidth / img.width) * img.height;
-            const margin = 30; // Adjusted margin for vertical image
-            ctx.drawImage(img, (canvas.width - logoWidth) / 2, margin, logoWidth, logoHeight);
-        };
-
-        video.style.display = 'none';
-        canvas.style.display = 'block';
-        captureButton.style.display = 'none';
-        additionalButtons.style.display = 'block';
-    });
-
-    retakeButton.addEventListener('click', () => {
-        video.style.display = 'block';
-        canvas.style.display = 'none';
-        captureButton.style.display = 'inline-block';
-        additionalButtons.style.display = 'none';
-    });
-
-    uploadButton.addEventListener('click', async () => {
-        canvas.toBlob(async (blob) => {
+        async function setupCamera(facingMode = 'user') {
             try {
-                const response = await fetch(`${BACKEND_URL}/upload`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': blob.type,
-                        'X-File-Name': 'captured_image.png'
-                    },
-                    body: blob
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log('Upload successful:', result);
-                alert(result.message);
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
+                video.srcObject = stream;
+                await video.play();
             } catch (error) {
-                console.error('Upload error:', error);
-                errorLog.textContent = `Upload error: ${error.message}`;
+                errorLog.textContent = `Camera error: ${error.message}`;
             }
-        }, 'image/jpeg'); // Change to 'image/jpeg' for better compression quality
-    });
+        }
 
-    switchCameraButton.addEventListener('click', switchCamera);
+        function switchCamera() {
+            currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+            setupCamera(currentFacingMode);
+        }
 
-    window.addEventListener('load', () => setupCamera(currentFacingMode));
-</script>
+        captureButton.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            const img = new Image();
+            img.src = 'Assets/Bacardi Logo White.png'; // Watermark logo
+            img.onload = () => {
+                const ctx = canvas.getContext('2d');
+                const logoWidth = 150;
+                const logoHeight = (logoWidth / img.width) * img.height;
+                const margin = 20;
+                ctx.drawImage(img, (canvas.width - logoWidth) / 2, margin, logoWidth, logoHeight);
+            };
+
+            video.style.display = 'none';
+            canvas.style.display = 'block';
+            captureButton.style.display = 'none';
+            additionalButtons.style.display = 'block';
+        });
+
+        retakeButton.addEventListener('click', () => {
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+            captureButton.style.display = 'inline-block';
+            additionalButtons.style.display = 'none';
+        });
+
+        uploadButton.addEventListener('click', async () => {
+            canvas.toBlob(async (blob) => {
+                try {
+                    const response = await fetch(`${BACKEND_URL}/upload`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': blob.type,
+                            'X-File-Name': 'captured_image.jpeg'
+                        },
+                        body: blob
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('Upload successful:', result);
+                    alert(result.message);
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    errorLog.textContent = `Upload error: ${error.message}`;
+                }
+            }, 'image/jpeg');
+        });
+
+        switchCameraButton.addEventListener('click', switchCamera);
+
+        window.addEventListener('load', () => setupCamera(currentFacingMode));
+    </script>
 </body>
 </html>
