@@ -253,3 +253,10 @@
                 }
             }, 'image/jpeg');
         });
+
+        switchCameraButton.addEventListener('click', switchCamera);
+
+        window.addEventListener('load', () => setupCamera(currentFacingMode));
+    </script>
+</body>
+</html>
