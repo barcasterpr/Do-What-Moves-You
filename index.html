@@ -195,10 +195,16 @@
                     facingMode: facingMode,
                     width: { ideal: 1080 }, // Set ideal width to 1080px
                     height: { ideal: 1920 }, // Set ideal height to 1920px
+                    // Orientation adjustment
+                    transform: 'rotate(90deg)'
                 }
             });
             video.srcObject = stream;
             await video.play();
+            // Rotate the video to match the vertical orientation
+            video.style.transform = 'rotate(90deg)';
+            video.style.width = '100vh'; // Make video element fit the vertical screen height
+            video.style.height = 'auto'; // Maintain aspect ratio
         } catch (error) {
             errorLog.textContent = `Camera error: ${error.message}`;
         }
@@ -210,21 +216,21 @@
     }
 
     captureButton.addEventListener('click', () => {
-        // Capture the exact resolution from the video element (which will now match the camera resolution)
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        // Capture the exact resolution from the video element
+        canvas.width = video.videoHeight; // Reverse width and height
+        canvas.height = video.videoWidth; // Reverse width and height
 
         // Draw the video frame on the canvas at the current resolution
-        canvas.getContext('2d').drawImage(video, 0, 0);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         // Adding the watermark
         const img = new Image();
         img.src = 'Assets/Bacardi Logo White.png'; // Watermark logo
         img.onload = () => {
-            const ctx = canvas.getContext('2d');
-            const logoWidth = 150;
+            const logoWidth = 250; // Increased logo width
             const logoHeight = (logoWidth / img.width) * img.height;
-            const margin = 20;
+            const margin = 30; // Adjusted margin for vertical image
             ctx.drawImage(img, (canvas.width - logoWidth) / 2, margin, logoWidth, logoHeight);
         };
 
