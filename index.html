@@ -191,6 +191,8 @@
         async function setupCamera(facingMode = 'user') {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
+                width: { ideal: 1080 }, // Set ideal width
+                height: { ideal: 1920 } // Set ideal height
                 video.srcObject = stream;
                 await video.play();
             } catch (error) {
