@@ -174,92 +174,102 @@
         </div>
     </div>
 
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureButton = document.getElementById('captureButton');
-        const uploadButton = document.getElementById('uploadButton');
-        const retakeButton = document.getElementById('retakeButton');
-        const switchCameraButton = document.getElementById('switchCameraButton');
-        const errorLog = document.getElementById('errorLog');
-        const additionalButtons = document.getElementById('additionalButtons');
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('captureButton');
+    const uploadButton = document.getElementById('uploadButton');
+    const retakeButton = document.getElementById('retakeButton');
+    const switchCameraButton = document.getElementById('switchCameraButton');
+    const errorLog = document.getElementById('errorLog');
+    const additionalButtons = document.getElementById('additionalButtons');
 
-        let currentFacingMode = 'user'; // Start with front camera
+    let currentFacingMode = 'user'; // Start with front camera
 
-        const BACKEND_URL = 'https://do-what-moves-you.vercel.app';
+    const BACKEND_URL = 'https://do-what-moves-you.vercel.app';
 
-        async function setupCamera(facingMode = 'user') {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
-                video.srcObject = stream;
-                await video.play();
-            } catch (error) {
-                errorLog.textContent = `Camera error: ${error.message}`;
-            }
-        }
-
-        function switchCamera() {
-            currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
-            setupCamera(currentFacingMode);
-        }
-
-        captureButton.addEventListener('click', () => {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-
-            const img = new Image();
-            img.src = 'Assets/Bacardi Logo White.png'; // Watermark logo
-            img.onload = () => {
-                const ctx = canvas.getContext('2d');
-                const logoWidth = 150;
-                const logoHeight = (logoWidth / img.width) * img.height;
-                const margin = 20;
-                ctx.drawImage(img, (canvas.width - logoWidth) / 2, margin, logoWidth, logoHeight);
-            };
-
-            video.style.display = 'none';
-            canvas.style.display = 'block';
-            captureButton.style.display = 'none';
-            additionalButtons.style.display = 'block';
-        });
-
-        retakeButton.addEventListener('click', () => {
-            video.style.display = 'block';
-            canvas.style.display = 'none';
-            captureButton.style.display = 'inline-block';
-            additionalButtons.style.display = 'none';
-        });
-
-        uploadButton.addEventListener('click', async () => {
-            canvas.toBlob(async (blob) => {
-                try {
-                    const response = await fetch(`${BACKEND_URL}/upload`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': blob.type,
-                            'X-File-Name': 'captured_image.jpeg'
-                        },
-                        body: blob
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    console.log('Upload successful:', result);
-                    alert(result.message);
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    errorLog.textContent = `Upload error: ${error.message}`;
+    async function setupCamera(facingMode = 'user') {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: facingMode,
+                    width: { ideal: 1080 }, // Set ideal width to 1080px
+                    height: { ideal: 1920 }, // Set ideal height to 1920px
                 }
-            }, 'image/jpeg');
-        });
+            });
+            video.srcObject = stream;
+            await video.play();
+        } catch (error) {
+            errorLog.textContent = `Camera error: ${error.message}`;
+        }
+    }
 
-        switchCameraButton.addEventListener('click', switchCamera);
+    function switchCamera() {
+        currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+        setupCamera(currentFacingMode);
+    }
 
-        window.addEventListener('load', () => setupCamera(currentFacingMode));
-    </script>
+    captureButton.addEventListener('click', () => {
+        // Capture the exact resolution from the video element (which will now match the camera resolution)
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        // Draw the video frame on the canvas at the current resolution
+        canvas.getContext('2d').drawImage(video, 0, 0);
+
+        // Adding the watermark
+        const img = new Image();
+        img.src = 'Assets/Bacardi Logo White.png'; // Watermark logo
+        img.onload = () => {
+            const ctx = canvas.getContext('2d');
+            const logoWidth = 150;
+            const logoHeight = (logoWidth / img.width) * img.height;
+            const margin = 20;
+            ctx.drawImage(img, (canvas.width - logoWidth) / 2, margin, logoWidth, logoHeight);
+        };
+
+        video.style.display = 'none';
+        canvas.style.display = 'block';
+        captureButton.style.display = 'none';
+        additionalButtons.style.display = 'block';
+    });
+
+    retakeButton.addEventListener('click', () => {
+        video.style.display = 'block';
+        canvas.style.display = 'none';
+        captureButton.style.display = 'inline-block';
+        additionalButtons.style.display = 'none';
+    });
+
+    uploadButton.addEventListener('click', async () => {
+        canvas.toBlob(async (blob) => {
+            try {
+                const response = await fetch(`${BACKEND_URL}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': blob.type,
+                        'X-File-Name': 'captured_image.png'
+                    },
+                    body: blob
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Upload successful:', result);
+                alert(result.message);
+            } catch (error) {
+                console.error('Upload error:', error);
+                errorLog.textContent = `Upload error: ${error.message}`;
+            }
+        }, 'image/jpeg'); // Change to 'image/jpeg' for better compression quality
+    });
+
+    switchCameraButton.addEventListener('click', switchCamera);
+
+    window.addEventListener('load', () => setupCamera(currentFacingMode));
+</script>
 </body>
 </html>
