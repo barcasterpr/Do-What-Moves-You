@@ -24,8 +24,8 @@
             height: 100vh;
         }
 
-        .container {
-            position: relative; /* Changed from 'center' to 'relative' */
+          .container {
+            position: center; /* Changed from 'center' to 'relative' */
             background-image: url('Assets/Container BG Tall.png'); /* Container background */
             background-size: contain; /* Ensures the whole image is displayed */
             background-repeat: no-repeat;
@@ -39,25 +39,25 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-        }
+}
 
-        /* Media query for very small screens (like older iPhones or smaller Androids) */
-        @media (max-width: 375px) {
-            .container {
-                width: 90vw; /* Slightly wider for very small screens */
-                max-width: none; /* Removes the max-width constraint on small devices */
-                padding: 15px 5px; /* Adjust padding for smaller devices */
-            }
-        }
+/* Media query for very small screens (like older iPhones or smaller Androids) */
+@media (max-width: 375px) {
+    .container {
+        width: 90vw; /* Slightly wider for very small screens */
+        max-width: none; /* Removes the max-width constraint on small devices */
+        padding: 15px 5px; /* Adjust padding for smaller devices */
+    }
+}
 
-        #video, #canvas {
-            width: 100%;
-            max-width: 290px; /* Reduced from 300px */
-            aspect-ratio: 4 / 3; /* Optional: Keeps a standard aspect ratio, adjust as needed */
-            display: block; /* Ensure block display for horizontal centering */
-            margin: 0 auto; /* Center horizontally */
-            margin-top: 90px;
-        }
+     #video, #canvas {
+           width: 100%;
+           max-width: 290px; /* Reduced from 300px
+           aspect-ratio: 4 / 3; /* Optional: Keeps a standard aspect ratio, adjust as needed */
+           display: block; /* Ensure block display for horizontal centering */
+           margin: 0 auto; /* Center horizontally */
+           margin-top: 90px; 
+}
 
         button {
             padding: 10px 20px;
@@ -130,23 +130,8 @@
         /* Button group layout */
         .button-group {
             display: flex;
-            justify-content: center; /* Center align the buttons */
-            gap: 10px; /* Space between buttons */
-        }
-
-        #additionalButtons {
-            display: flex;
-            justify-content: center; /* Center align additional buttons */
-            gap: 10px; /* Space between buttons */
-        }
-
-        /* Hide the switch button along with capture button when capture is pressed */
-        #switchCameraButton.hidden {
-            display: none;
-        }
-
-        #captureButton.hidden {
-            display: none;
+            justify-content: space-between;
+            width: 100%;
         }
 
         /* Responsive design */
@@ -235,17 +220,15 @@
 
             video.style.display = 'none';
             canvas.style.display = 'block';
-            captureButton.classList.add('hidden'); // Hide capture button
-            switchCameraButton.classList.add('hidden'); // Hide switch button
-            additionalButtons.style.display = 'flex'; // Show additional buttons
+            captureButton.style.display = 'none';
+            additionalButtons.style.display = 'block';
         });
 
         retakeButton.addEventListener('click', () => {
             video.style.display = 'block';
             canvas.style.display = 'none';
-            captureButton.classList.remove('hidden'); // Show capture button
-            switchCameraButton.classList.remove('hidden'); // Show switch button
-            additionalButtons.style.display = 'none'; // Hide additional buttons
+            captureButton.style.display = 'inline-block';
+            additionalButtons.style.display = 'none';
         });
 
         uploadButton.addEventListener('click', async () => {
@@ -267,4 +250,16 @@
                     const result = await response.json();
                     console.log('Upload successful:', result);
                     alert(result.message);
-                } catch
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    errorLog.textContent = `Upload error: ${error.message}`;
+                }
+            }, 'image/jpeg');
+        });
+
+        switchCameraButton.addEventListener('click', switchCamera);
+
+        window.addEventListener('load', () => setupCamera(currentFacingMode));
+    </script>
+</body>
+</html>
